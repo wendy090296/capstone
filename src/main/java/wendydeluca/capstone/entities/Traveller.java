@@ -26,7 +26,7 @@ public class Traveller  {
     private String surname;
     private String age;
     private String email;
-    private String nationality;
+    private String country;
     @Column(name = "travel_destination")
     private String travelDestination;
     private String description;
@@ -46,7 +46,7 @@ this.name=name;
 this.surname=surname;
 this.age=age;
 this.email=email;
-this.nationality=nationality;
+this.country=country;
 this.travelDestination=travelDestination;
 this.description=description;
 this.spokenLanguages=spokenLanguages;

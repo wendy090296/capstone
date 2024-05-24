@@ -37,7 +37,7 @@ public class TravellerService{
         traveller.setEmail(body.email());
         traveller.setAvatar(body.avatar());
         traveller.setDescription(body.description());
-        traveller.setNationality(body.nationality());
+        traveller.setCountry(body.country());
         traveller.setAvatar(body.avatar());
         traveller.setTravelDestination(body.travelDestination());
         traveller.setSpokenLanguages(body.spokenLanguages());
@@ -54,7 +54,7 @@ public class TravellerService{
         found.setEmail(body.email());
         found.setAvatar(body.avatar());
         found.setDescription(body.description());
-        found.setNationality(body.nationality());
+        found.setCountry(body.country());
         found.setAvatar(body.avatar());
         found.setTravelDestination(body.travelDestination());
         found.setSpokenLanguages(body.spokenLanguages());

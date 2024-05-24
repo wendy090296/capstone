@@ -2,9 +2,16 @@ package wendydeluca.capstone.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import wendydeluca.capstone.entities.Traveller;
+import wendydeluca.capstone.exceptions.BadRequestException;
 import wendydeluca.capstone.payloads.traveller.TravellerDTO;
+import wendydeluca.capstone.payloads.traveller.TravellerResponseDTO;
 import wendydeluca.capstone.services.TravellerService;
 
 import java.util.UUID;
@@ -15,7 +22,7 @@ public class TravellerController {
     @Autowired
     public TravellerService tService;
 
-@GetMapping
+    @GetMapping
     public Page<Traveller> getAllTravellers(@RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size,
                                             @RequestParam(defaultValue = "name") String sortBy){
@@ -28,20 +35,48 @@ public class TravellerController {
 }
 
 @PostMapping
-    public Traveller saveTraveller(@RequestBody TravellerDTO body){
-    return tService.saveTraveller(body);
+//@PreAuthorize("hasAuthority('ADMIN')")
+@ResponseStatus(HttpStatus.CREATED)
+    public TravellerResponseDTO saveTraveller(@RequestBody @Validated TravellerDTO body, BindingResult validation){
+        if(validation.hasErrors()){
+            System.out.println(validation.getAllErrors());
+            throw new BadRequestException(validation.getAllErrors());
+        }
+    return new TravellerResponseDTO(this.tService.saveTraveller(body).getId());
 }
 
 @PutMapping("/{tId}")
+//@PreAuthorize("hasAuthority('ADMIN')")
+@ResponseStatus(HttpStatus.ACCEPTED)
     public Traveller getByIdAndUpdate(@PathVariable UUID tId, @RequestBody TravellerDTO body){
    return tService.updateTraveller(tId, body);
 
 }
 
 @DeleteMapping("/{tId}")
+//@PreAuthorize("hasAuthority('ADMIN')")
+@ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTraveller(@PathVariable UUID tId){
     tService.deleteTraveller(tId);
 
 }
+    @GetMapping("/me")
+    public Traveller getProfile(@AuthenticationPrincipal Traveller authTraveller){
+        return authTraveller;
+    }
 
+
+
+    @PutMapping("/me")
+    @ResponseStatus(HttpStatus.ACCEPTED  )
+    public Traveller updateProfile(@AuthenticationPrincipal Traveller authTraveller, @RequestBody TravellerDTO body){
+        return tService.updateTraveller(authTraveller.getId(),body);
+    }
+
+
+   @DeleteMapping("/me")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProfile(@AuthenticationPrincipal Traveller authTraveller){
+        tService.deleteTraveller(authTraveller.getId());
+    }
 }

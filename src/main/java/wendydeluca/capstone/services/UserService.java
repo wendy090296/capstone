@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import wendydeluca.capstone.entities.Host;
 import wendydeluca.capstone.entities.User;
 import wendydeluca.capstone.exceptions.BadRequestException;
 import wendydeluca.capstone.exceptions.NotFoundException;
@@ -64,4 +65,7 @@ public class UserService {
         User found = this.findById(userId);
         uDAO.delete(found);
     }
+
+
+
 }
