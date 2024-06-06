@@ -1,5 +1,6 @@
 package wendydeluca.capstone.payloads.host;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 public record HostDTO(@NotEmpty(message = "Name cannot be empty")
@@ -10,7 +11,11 @@ public record HostDTO(@NotEmpty(message = "Name cannot be empty")
                       @NotEmpty(message = "Surname cannot be empty")
                       @Size(min = 3, max = 20, message = "Surname must be between 3 and 30 chars")
                       String surname,
-                      @Min(value = 18)
+                      @NotNull(message = "Email cannot be null")
+                      @NotEmpty(message = "Email cannot be empty")
+                      @Email(message = "Please insert a valid email format!")
+                      String email,
+
                       @NotEmpty(message = "The age field must be filled")
                       @Max(value=60)
                       String age,
@@ -19,8 +24,7 @@ public record HostDTO(@NotEmpty(message = "Name cannot be empty")
                       String location,
                       @NotEmpty(message = "ProjectDescription must not be empty")
                       @NotNull(message = "ProjectDescription cannot be null")
-                      @Min(value =20)
-                      @Max(value = 100)
+                      @Column(length = 3000)
                       String projectDescription,
                       @NotEmpty(message = "Image must not be empty")
                       @NotNull(message = "Image cannot be null")
@@ -28,20 +32,25 @@ public record HostDTO(@NotEmpty(message = "Name cannot be empty")
                       @NotEmpty(message = "Languages must not be empty")
                       @NotNull(message = "Languages cannot be null")
                       String spokenLanguages,
-                      @Min(value=1)
-                      @Max(value=5)
+
                       @NotEmpty(message = "MaxOccupancy must not be empty")
                       @NotNull(message = "MaxOccupancy must not be null")
                       String maxOccupancy,
-                      @Min(value=3)
-                      @Max(value=5)
+
                       @NotEmpty(message = "Working hours must not be empty")
                       @NotNull(message = "Working hours must not be null")
                       String workingHours,
                       @NotEmpty(message = "Wifi must not be empty")
                       @NotNull(message = "Wifi hours must not be null")
                       String wifi,
-                      @NotEmpty(message = "Pets field must not be empty")
-                      @NotNull(message = "Pets field must not be null")
-                      String pets) {
+//                      @NotEmpty(message = "Pets field must not be empty")
+//                      @NotNull(message = "Pets field must not be null")
+                        String pets,
+//                      @NotEmpty(message = "Country field must not be empty")
+//                      @NotNull(message = "Country field must not be null")
+                      String flag,
+                      @NotEmpty(message = "Password field must not be empty")
+                      @NotNull(message = "Password must not be null")
+                      @Size(message = "Password must be at least 8 chars.")
+                      String password) {
 }

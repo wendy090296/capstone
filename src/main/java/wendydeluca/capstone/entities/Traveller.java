@@ -38,10 +38,10 @@ public class Traveller  {
     @JsonIgnore
     @ToString.Exclude
     private List<Host> host;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE} )
     private User user;
 
-    public Traveller(String name, String surname,String age,String email,String nationality,String travelDestination,String description,String spokenLanguages,String avatar,String interests){
+    public Traveller(String name, String surname,String age,String email,String country,String travelDestination,String description,String spokenLanguages,String avatar,String interests){
 this.name=name;
 this.surname=surname;
 this.age=age;

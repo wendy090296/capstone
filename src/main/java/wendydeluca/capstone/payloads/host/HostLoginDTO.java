@@ -1,4 +1,6 @@
 package wendydeluca.capstone.payloads.host;
 
-public record HostLoginDTO (String email,String password){
+import wendydeluca.capstone.entities.Role;
+
+public record HostLoginDTO (String email, String password, String role){
 }

@@ -20,6 +20,7 @@ public class Host {
     private UUID id;
     private String name;
     private String surname;
+    private String email;
     private String age;
     private String location;
     @Column(name = "project_description")
@@ -31,6 +32,7 @@ public class Host {
     private String maxOccupancy;
     @Column(name = "working_hours")
     private String workingHours;
+    private String flag;
     private String wifi;
     private String pets;
     @ManyToOne
@@ -38,16 +40,18 @@ public class Host {
     @JsonIgnore
     @ToString.Exclude
     private Traveller traveller;
-    @OneToOne
-    private User user;
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
+    public User user;
 
-    public Host(String name,String surname,String age,String location,String projectDescription,String avatar,
+    public Host(String name,String surname,String email,String age,String location,String projectDescription,String avatar,
                 String spokenLanguages,
                 String maxOccupancy,String workingHours,
                 String wifi,
-                String pets){
+                String pets,
+                String flag){
         this.name=name;
         this.surname=surname;
+        this.email=email;
         this.age=age;
         this.location=location;
         this.projectDescription=projectDescription;
@@ -55,6 +59,7 @@ public class Host {
         this.spokenLanguages=spokenLanguages;
         this.maxOccupancy=maxOccupancy;
         this.workingHours=workingHours;
+        this.flag=flag;
         this.wifi=wifi;
         this.pets=pets;
     }

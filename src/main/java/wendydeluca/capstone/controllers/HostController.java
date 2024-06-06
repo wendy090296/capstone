@@ -26,7 +26,7 @@ public class HostController {
 
     @GetMapping
     public Page<Host> getAllHosts(@RequestParam(defaultValue = "0") int page,
-                                  @RequestParam(defaultValue = "10") int size,
+                                  @RequestParam(defaultValue = "20") int size,
                                   @RequestParam(defaultValue = "name") String sortBy){
         return hService.findAllHosts(page,size,sortBy);
     }
@@ -68,13 +68,13 @@ public class HostController {
         return authHost;
     }
 
-    @PutMapping("/me")
+    @PutMapping("/me/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Host updateProfile(@AuthenticationPrincipal Host authHost, @RequestBody HostDTO body){
-        return hService.updateHost(authHost.getId(),body);
+    public Host updateProfile(@PathVariable UUID id, @RequestBody HostDTO body){
+        return hService.updateHost(id,body);
     }
 
-    @DeleteMapping("/me")
+    @DeleteMapping("/me/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProfile(@AuthenticationPrincipal Host authHost){
         hService.deleteHost(authHost.getId());

@@ -1,5 +1,7 @@
 package wendydeluca.capstone.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,12 +9,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import wendydeluca.capstone.entities.Host;
 import wendydeluca.capstone.entities.User;
 import wendydeluca.capstone.exceptions.BadRequestException;
 import wendydeluca.capstone.exceptions.NotFoundException;
 import wendydeluca.capstone.payloads.user.UserDTO;
 import wendydeluca.capstone.repositories.UserDAO;
+import wendydeluca.capstone.tools.MailgunSender;
+
+import java.io.IOException;
 
 @Service
 public class UserService {
@@ -22,6 +28,12 @@ public class UserService {
 
     @Autowired
     public PasswordEncoder bcrypt;
+
+    @Autowired
+    public MailgunSender mailgunSender;
+
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
 
 
@@ -45,6 +57,7 @@ public class UserService {
         if (!uDAO.existsByEmail(payload.email())) {
             // 2. creo un nuovo oggetto User "modellato" sul payload
             User newUser = new User(payload.name(), payload.surname(), payload.email(), bcrypt.encode(payload.password()));
+            mailgunSender.sendRegistrationEmail(newUser);
             return uDAO.save(newUser);
             // Se é già presente, lancio eccezione :
         } else throw new BadRequestException("User with email '" + payload.email() + "  already exists.");
@@ -65,6 +78,11 @@ public class UserService {
         User found = this.findById(userId);
         uDAO.delete(found);
     }
+    public String uploadImage(MultipartFile image) throws IOException {
+        String url = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
+        return url;
+    }
+
 
 
 

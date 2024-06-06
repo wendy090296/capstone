@@ -26,8 +26,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public UserLoginRespDTO login(@RequestBody UserLoginDTO payload){
-        return new UserLoginRespDTO(this.authService.authenticateUserAndGenerateToken(payload));
+        return this.authService.authenticateUserAndGenerateToken(payload);
     }
+
+
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)

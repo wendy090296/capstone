@@ -1,4 +1,6 @@
 package wendydeluca.capstone.payloads.user;
 
-public record UserLoginRespDTO(String accessToken) {
+import java.util.UUID;
+
+public record UserLoginRespDTO(String accessToken, UUID id , String name,String surname,String role) {
 }

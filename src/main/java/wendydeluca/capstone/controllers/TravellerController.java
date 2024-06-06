@@ -8,12 +8,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import wendydeluca.capstone.entities.Traveller;
 import wendydeluca.capstone.exceptions.BadRequestException;
 import wendydeluca.capstone.payloads.traveller.TravellerDTO;
 import wendydeluca.capstone.payloads.traveller.TravellerResponseDTO;
 import wendydeluca.capstone.services.TravellerService;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,7 +26,7 @@ public class TravellerController {
     public TravellerService tService;
 
     @GetMapping
-    public Page<Traveller> getAllTravellers(@RequestParam(defaultValue = "0") int page,
+    public List<Traveller> getAllTravellers(@RequestParam(defaultValue = "0") int page,
                                             @RequestParam(defaultValue = "10") int size,
                                             @RequestParam(defaultValue = "name") String sortBy){
     return tService.findAllTravellers(page,size,sortBy);
@@ -67,16 +70,20 @@ public class TravellerController {
 
 
 
-    @PutMapping("/me")
+    @PutMapping("/me/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED  )
-    public Traveller updateProfile(@AuthenticationPrincipal Traveller authTraveller, @RequestBody TravellerDTO body){
-        return tService.updateTraveller(authTraveller.getId(),body);
+    public Traveller updateProfile(@PathVariable UUID id, @RequestBody TravellerDTO body){
+        return tService.updateTraveller(id,body);
     }
 
 
-   @DeleteMapping("/me")
+   @DeleteMapping("/me/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProfile(@AuthenticationPrincipal Traveller authTraveller){
         tService.deleteTraveller(authTraveller.getId());
     }
+
+
+
 }
+

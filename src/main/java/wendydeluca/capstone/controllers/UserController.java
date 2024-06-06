@@ -8,12 +8,15 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import wendydeluca.capstone.entities.User;
 import wendydeluca.capstone.exceptions.BadRequestException;
 import wendydeluca.capstone.payloads.user.UserDTO;
 import wendydeluca.capstone.payloads.user.UserResponseDTO;
 import wendydeluca.capstone.services.UserService;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -66,7 +69,7 @@ public class UserController {
 
     }
 
-
+ //----------------- PERSONAL PROFILE -----------------//
     @GetMapping("/me")
     public User getProfile(@AuthenticationPrincipal User currentAuthUser){
         return currentAuthUser;
@@ -83,6 +86,13 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProfile(@AuthenticationPrincipal User currentAuthUser){
         this.userService.deleteUser(currentAuthUser.getId());
+    }
+    @PostMapping("/upload")
+    public String uploadAvatar(@RequestParam("avatar") MultipartFile image) throws IOException {
+        // "avatar" deve corrispondere ESATTAMENTE alla chiave del Multipart dove sarà contenuto il file
+        // altrimenti il file non verrà trovato
+        return this.userService.uploadImage(image);
+
     }
 
 }

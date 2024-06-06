@@ -47,6 +47,8 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         String id= jwtTools.extractIdFromToken(accessToken);
         long userId = Long.parseLong(id);
         User currentUser = uService.findById(userId);
+        System.out.println(currentUser);
+        System.out.println("---------------------------------------------");
 
 
         // 4.2 informo spring security il ruolo dello user che sta effettuando la richiesta
@@ -57,6 +59,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
         // 4.3 procede al prossimo filtro della catena
         filterChain.doFilter(request,response);
+        System.out.println(authentication);
 
         // se il token non é ok, --> 401.
 
